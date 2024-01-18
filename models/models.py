@@ -1,28 +1,29 @@
+from dataclasses import dataclass
+
+@dataclass
 class Owner: 
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
+    id: int
+    name: str
 
+@dataclass
 class Raspy: 
-    def __init__(self, id, name, owner, sensors):
-        self.id = id
-        self.name = name
-        self.owner = owner
-        self.sensors = sensors
+    id: int
+    name: str
+    owner: Owner
+    sensors: list
 
+@dataclass
 class Sensor:
-    def __init__(self, id, name, dataEntries, isAvailable, 
-    unit, highestPossible, lowestPossible):
-        self.id = id
-        self.name = name
-        self.dataEntries = dataEntries
-        self.isAvailable = isAvailable
-        self.unit = unit
-        self.highestPossible = highestPossible
-        self.lowestPossible = lowestPossible
+    id: int
+    name: str
+    dataEntries: list
+    isAvailable: bool
+    unit: str
+    highestPossible: int
+    lowestPossible: int
 
+@dataclass
 class DataEntry:
-    def __init__(self, value, timestamp):
-        self.value = value
-        self.timestamp = timestamp
+    id: int
+    value: int
 
