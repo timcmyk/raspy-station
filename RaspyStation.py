@@ -30,8 +30,8 @@ else:
             T_fahrenheit = T_celsius * 9 / 5 + 32
 
             # save in database
-            databaseService.saveTemperature(T_celsius, 1)
-            databaseService.saveHumidity(humidity, 2)
+            databaseService.saveTemperature(1, T_celsius)
+            databaseService.saveHumidity(2, humidity)
 
             print(
                 "Temperature       : %f\u00b0C / %f\u00b0F" % (T_celsius, T_fahrenheit)

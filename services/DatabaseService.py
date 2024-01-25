@@ -24,7 +24,7 @@ class DatabaseService:
             print(f"Error connecting to MariaDB Platform: {e}")
             sys.exit(1)
 
-    def saveTemperature(self, temperature, sensorId):
+    def saveTemperature(self, sensorId, temperature):
         self.cursor.execute(
             "INSERT INTO raspystation_db.DataEntry (sensorId, value) VALUES (?, ?)",
             (
@@ -34,6 +34,12 @@ class DatabaseService:
         )
         self.conn.commit()
 
-    def saveHumidity(self, humidity):
-        self.cursor.execute("INSERT INTO humidity (humidity) VALUES (?)", (humidity,))
+    def saveHumidity(self, sensorId, humidity):
+        self.cursor.execute(
+            "INSERT INTO raspystation_db.DataEntry (sensorId, value) VALUES (?, ?)",
+            (
+                sensorId,
+                humidity,
+            ),
+        )
         self.conn.commit()
