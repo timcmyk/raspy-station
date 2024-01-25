@@ -3,8 +3,8 @@
 
 from time import strftime, sleep
 
-from DataAggregator import DataAggregator
-from DatabaseService import DatabaseService
+from services.aggregators import DataAggregator
+from services import DatabaseService
 
 # The first  parameter is to select i2c0 or i2c1
 # The second parameter is the i2c device address
