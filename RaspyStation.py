@@ -11,8 +11,8 @@ from services import DatabaseService
 I2C_BUS = 0x01  # default use I2C1 bus
 I2C_ADDRESS = 0x38  # default I2C device address
 
-dht20 = DataAggregator(I2C_BUS, I2C_ADDRESS)
-databaseService = DatabaseService()
+dht20 = DataAggregator.DataAggregator(I2C_BUS, I2C_ADDRESS)
+databaseService = DatabaseService.DatabaseService()
 
 # Initialize sensor
 if not dht20.begin():

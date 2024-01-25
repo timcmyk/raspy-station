@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 # logger.setLevel(logging.DEBUG)
 
 
-class DataAggregator:
+class DataAggregator(object):
 
     """Conversion data"""
 
