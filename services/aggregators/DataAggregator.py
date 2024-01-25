@@ -38,8 +38,8 @@
 import time
 import smbus2 as smbus
 import logging
-from TemperatureAggregator import TemperatureAggregator
-from HumidityAggregator import HumidityAggregator
+import TemperatureAggregator
+import HumidityAggregator
 
 # debug logging
 logging.basicConfig()
