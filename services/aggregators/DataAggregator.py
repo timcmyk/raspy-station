@@ -5,7 +5,7 @@
 # Modified by https://github.com/cjee21/
 # MIT License
 # Copyright (c) 2022-2023 cjee21
-# 
+#
 #
 # Modifications:
 #
@@ -45,29 +45,28 @@ from HumidityAggregator import HumidityAggregator
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 # uncomment line below this to enable debug logging
-#logger.setLevel(logging.DEBUG)
-                
-class DFRobot_DHT20(object):
-
-  ''' Conversion data '''
-
-  _DEFAULT_ADDRESS = 0x50
-  _INIT_REG = 0x71
-  _TRIGGER_REG = 0xac
-  _DATA_REG = 0x71
-  _TRIGGER_COMMAND = [0x33, 0x00]
-  _CRC_POLYNOMIAL = 0x31
+# logger.setLevel(logging.DEBUG)
 
 
-  def __init__(self, bus, address=_DEFAULT_ADDRESS):
+class DataAggregator(object):
+
+    """Conversion data"""
+
+    _DEFAULT_ADDRESS = 0x50
+    _INIT_REG = 0x71
+    _TRIGGER_REG = 0xAC
+    _DATA_REG = 0x71
+    _TRIGGER_COMMAND = [0x33, 0x00]
+    _CRC_POLYNOMIAL = 0x31
+
+    def __init__(self, bus, address=_DEFAULT_ADDRESS):
         self.i2cbus = smbus.SMBus(bus)
         self._addr = address
         self.idle = 0
 
-
-  # Sensor initialization function
-  # @return Return True if initialization succeeds, otherwise return False.
-  def begin(self):
+    # Sensor initialization function
+    # @return Return True if initialization succeeds, otherwise return False.
+    def begin(self):
         # after power-on, wait no less than 100ms
         time.sleep(0.5)
 
@@ -75,10 +74,9 @@ class DFRobot_DHT20(object):
         data = self.read_reg(self._INIT_REG, 1)
         return (data[0] & 0x18) == 0x18
 
-
-  # Get both temperature and humidity in a single read
-  # @return Return temperature (C), humidity (%) and CRC result (True if error else False) as tuple
-  def get_temperature_and_humidity(self):
+    # Get both temperature and humidity in a single read
+    # @return Return temperature (C), humidity (%) and CRC result (True if error else False) as tuple
+    def get_temperature_and_humidity(self):
         # trigger measurement
         self.write_reg(self._TRIGGER_REG, self._TRIGGER_COMMAND)
 
@@ -110,11 +108,10 @@ class DFRobot_DHT20(object):
         # return results
         return (temperature, humidity, crc_error)
 
-
-  # CRC function
-  # @param message - data from sensor which its CRC-8 is to be calculated
-  # @return Return calculated CRC-8
-  def calc_CRC8(self, data):
+    # CRC function
+    # @param message - data from sensor which its CRC-8 is to be calculated
+    # @return Return calculated CRC-8
+    def calc_CRC8(self, data):
         crc = 0xFF
         for i in data[:-1]:
             crc ^= i
@@ -122,12 +119,10 @@ class DFRobot_DHT20(object):
                 crc = (crc << 1) ^ self._CRC_POLYNOMIAL if crc & 0x80 else crc << 1
         return crc & 0xFF
 
-  
-  def write_reg(self, reg, data):
+    def write_reg(self, reg, data):
         time.sleep(0.01)
         self.i2cbus.write_i2c_block_data(self._addr, reg, data)
-  
-  
-  def read_reg(self, reg, length):
+
+    def read_reg(self, reg, length):
         time.sleep(0.01)
         return self.i2cbus.read_i2c_block_data(self._addr, reg, length)

@@ -26,4 +26,5 @@ class Sensor:
 class DataEntry:
     id: int
     value: int
+    timestamp: str
 
