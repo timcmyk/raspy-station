@@ -1,6 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./services/aggregators",
-        "./services"
+        "./src",
+        "./src/services"
     ]
 }

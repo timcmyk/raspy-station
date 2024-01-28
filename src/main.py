@@ -1,18 +1,18 @@
 # Originally from https://github.com/DFRobot/DFRobot_DHT20/tree/master/python/raspberrypi
 # Modified by https://github.com/cjee21/ on 16 January 2023
 
-from time import strftime, sleep
+from time import sleep
 
-from services.aggregators import DataAggregator
-from services import DatabaseService
+from aggregators.data_aggregator import DataAggregator
+from services.database_service import DatabaseService
 
 # The first  parameter is to select i2c0 or i2c1
 # The second parameter is the i2c device address
 I2C_BUS = 0x01  # default use I2C1 bus
 I2C_ADDRESS = 0x38  # default I2C device address
 
-dht20 = DataAggregator.DataAggregator(I2C_BUS, I2C_ADDRESS)
-databaseService = DatabaseService.DatabaseService()
+dht20 = DataAggregator(I2C_BUS, I2C_ADDRESS)
+databaseService = DatabaseService()
 
 # Initialize sensor
 if not dht20.begin():
@@ -22,7 +22,6 @@ else:
     databaseService.connect()
     while True:
         # Read ambient temperature and relative humidity and print them to terminal
-        print(strftime("%Y-%m-%d %H:%M:%S %Z"))
         T_celsius, humidity, crc_error = dht20.get_temperature_and_humidity()
         if crc_error:
             print("CRC               : Error\n")
@@ -30,12 +29,8 @@ else:
             T_fahrenheit = T_celsius * 9 / 5 + 32
 
             # save in database
-            databaseService.saveTemperature(1, T_celsius)
-            databaseService.saveHumidity(2, humidity)
+            # sensorIds have to be set manually for now
+            databaseService.saveDataEntry(4, T_celsius)
+            databaseService.saveDataEntry(5, humidity)
 
-            print(
-                "Temperature       : %f\u00b0C / %f\u00b0F" % (T_celsius, T_fahrenheit)
-            )
-            print("Relative Humidity : %f %%" % humidity)
-            print("CRC               : OK\n")
-            sleep(5)
+            sleep(300)
