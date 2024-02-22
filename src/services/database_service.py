@@ -12,9 +12,9 @@ class DatabaseService:
         # Connect to MariaDB Platform
         try:
             conn = mariadb.connect(
-                user="raspy",
-                password="Altemeißnerlandstraße39",
-                host="192.168.2.149",
+                user="",
+                password="",
+                host="",
                 port=3307,
                 database="raspystation_db",
             )
