@@ -3,6 +3,8 @@ import fire
 import os
 import sys
 import inspect
+from datetime import datetime
+
 
 # add parent directory to path to prepare for relative imports
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -20,8 +22,19 @@ fileName = "owner.json"
 # command to set name
 def name(name):
     # take name and write it to json
-    dictionary = {"name": name}
-    writeToJson(dictionary, fileName)
+
+    dictionary = getDictionaryFromJson(fileName)
+
+    if dictionary is not None:
+        oldName = dictionary.get("name")
+        print("Name was already set to: " + oldName)
+        print("Overwriting with new name: " + name)
+        writeToJson({"name": name}, fileName)
+    else:
+        now = datetime.now()
+        ownerId = id(now)
+        dictionary = {"name": name, "ownerId": ownerId}
+        writeToJson(dictionary, fileName)
 
 
 # command to save owner
@@ -32,16 +45,10 @@ def save():
     # check if name is set
     if name is None or name == "":
         print("Please set a name first by starting 'owner.py name'.")
-    # check if owner has already been created
-    elif ownerId is not None:
-        print("Owner already saved. Trying to update the name")
-        databaseService.connect()
-        databaseService.updateOwner(ownerId, name)
-    # create new owner
+    # create or update owner
     else:
         databaseService.connect()
-        ownerId = databaseService.createOwner(name)
-        writeToJson({"ownerId": ownerId}, fileName)
+        databaseService.createOwner(name, ownerId, dictionary)
 
 
 if __name__ == "__main__":
