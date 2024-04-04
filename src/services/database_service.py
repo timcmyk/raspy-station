@@ -1,4 +1,5 @@
 # Module Imports
+from datetime import datetime
 import firebase_admin
 from firebase_admin import db, credentials
 from initialization.json_helper import getDictionaryFromJson
@@ -23,8 +24,12 @@ class DatabaseService:
         # get ownerId from owner file
         ownerDictionary = getDictionaryFromJson("../target/owner.json")
         ownerId = ownerDictionary.get("ownerId")
+        dataEntryDictionary = {
+            "data": data,
+            "timestamp": datetime.timestamp(datetime.now()),
+        }
         db.reference("/" + str(ownerId) + "/sensors/" + str(sensorId) + "/data").push(
-            data
+            dataEntryDictionary
         )
 
     # method to persist owner (saves name and returns generated id)
