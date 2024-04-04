@@ -30,7 +30,7 @@ else:
 
             # save in database
             # sensorIds have to be set manually for now
-            databaseService.saveDataEntry(1345992943792, T_celsius)
-            databaseService.saveDataEntry(1738508151200, humidity)
+            databaseService.saveDataEntry(xyz, T_celsius)
+            databaseService.saveDataEntry(zyx, humidity)
 
             sleep(300)

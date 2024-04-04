@@ -10,13 +10,14 @@ class DatabaseService:
         self.connect()
 
     def connect(self):
-        cred = credentials.Certificate("../../credentials.json")
-        firebase_admin.initialize_app(
-            cred,
-            {
-                "databaseURL": "https://raspy-station-default-rtdb.europe-west1.firebasedatabase.app"
-            },
-        )
+        if not firebase_admin._apps:
+            cred = credentials.Certificate("../../credentials.json")
+            firebase_admin.initialize_app(
+                cred,
+                {
+                    "databaseURL": "https://raspy-station-default-rtdb.europe-west1.firebasedatabase.app"
+                },
+            )
 
     # method to persist data entry
     def saveDataEntry(self, sensorId, data):
