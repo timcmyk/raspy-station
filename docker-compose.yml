@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  raspy-station:
+    image: raspy-station:latest
+    container_name: raspy-station
+    restart: always
+    ports:
+      - 8999:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - raspy-station_data:/data
+    devices:  
+      - "/dev/i2c-1:/dev/i2c-1"  
+volumes:
+  raspy-station_data:

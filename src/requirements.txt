@@ -1,0 +1,2 @@
+firebase_admin==6.5.0
+smbus2==0.4.2

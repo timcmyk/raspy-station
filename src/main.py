@@ -3,7 +3,7 @@
 
 from time import sleep
 
-from aggregators.data_aggregator import DataAggregator
+from services.aggregators.data_aggregator import DataAggregator
 from services.database_service import DatabaseService
 
 # The first  parameter is to select i2c0 or i2c1
@@ -30,7 +30,7 @@ else:
 
             # save in database
             # sensorIds have to be set manually for now
-            databaseService.saveDataEntry(1, T_celsius)
-            databaseService.saveDataEntry(2, humidity)
+            databaseService.saveDataEntry(0, 0, T_celsius)
+            databaseService.saveDataEntry(0, 1, humidity)
 
             sleep(300)

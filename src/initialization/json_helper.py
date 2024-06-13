@@ -19,11 +19,11 @@ def writeToJson(newDictionary, fileName):
 
 
 def getDictionaryFromJson(fileName):
-    my_file = Path("./target/" + fileName)
+    my_file = Path(os.path.join(os.path.dirname(__file__), "./target/" + fileName))
     # check if file exists
     if my_file.is_file():
         # Opening JSON file
-        with open("./target/" + fileName, "r") as openfile:
+        with open(my_file, "r") as openfile:
             # Reading from json file
             return json.load(openfile)
 

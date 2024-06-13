@@ -1,6 +1,9 @@
 # Module Imports
-import mariadb
-import sys
+from datetime import datetime
+import firebase_admin
+from firebase_admin import db, credentials
+from initialization.json_helper import getDictionaryFromJson
+import os
 
 
 class DatabaseService:
@@ -9,34 +12,28 @@ class DatabaseService:
         self.cursor = None
 
     def connect(self):
-        # Connect to MariaDB Platform
-        try:
-            conn = mariadb.connect(
-                user="",
-                password="",
-                host="",
-                port=3307,
-                database="raspystation_db",
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(os.path.join(os.path.dirname(__file__), "credentials.json"))
+            firebase_admin.initialize_app(
+                cred,
+                {
+                    "databaseURL": "https://raspy-station-default-rtdb.europe-west1.firebasedatabase.app"
+                },
             )
-            # set connection and cursor to class variables
-            self.conn = conn
-            self.cursor = conn.cursor()
-        except mariadb.Error as e:
-            print(f"Error connecting to MariaDB Platform: {e}")
-            sys.exit(1)
 
     # method to persist data entry
-    def saveDataEntry(self, sensorId, data):
+    def saveDataEntry(self, raspyId, sensorId, data):
         # do execute
-        sql = "INSERT INTO raspystation_db.DataEntry (sensorId, value) VALUES (?, ?)"
-        self.cursor.execute(
-            sql,
-            (
-                sensorId,
-                data,
-            ),
+        # get ownerId from owner file
+        ownerDictionary = getDictionaryFromJson("owner.json")
+        ownerId = ownerDictionary.get("ownerId")
+        dataEntryDictionary = {
+            "data": data,
+            "timestamp": datetime.timestamp(datetime.now()),
+        }
+        db.reference("/" + str(ownerId) + "/raspies/" + str(raspyId) + "/sensors/" + str(sensorId) + "/data").push(
+            dataEntryDictionary
         )
-        self.conn.commit()
 
     # method to persist owner (saves name and returns generated id)
     def createOwner(self, name):
